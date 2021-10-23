@@ -13,7 +13,7 @@ from torchvision.datasets import ImageFolder
 from evaluation import compute_embedding, compute_knn
 from utils import DataAugmentation, Head, Loss, MultiCropWrapper, clip_gradients
 import tensorflow as tf
-import tensorboard as tbpython
+import tensorboard as tb
 tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
 
 
