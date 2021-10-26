@@ -161,7 +161,7 @@ def main():
                 )
                 writer.add_embedding(
                     embs,
-                    metaadata=[label_mapping[l] for l in labels_],
+                    metadata=[label_mapping[l] for l in labels_],
                     label_img=imgs,
                     global_step=n_steps,
                     tag="embeddings",
