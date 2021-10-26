@@ -30,7 +30,9 @@ import numpy as np
 import torch
 from torch import nn
 import torch.distributed as dist
-from PIL import ImageFilter, ImageOps
+from PIL import ImageFilter, ImageOps, Image 
+import torch.nn.functional as F
+import torchvision.transforms as transforms
 
 
 
