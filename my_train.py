@@ -106,8 +106,11 @@ def main():
     writer.add_text("arguments", json.dumps(vars(args)))
 
     # Neural network related
-    student_vit = timm.create_model(vit_name, pretrained=args.pretrained)
-    teacher_vit = timm.create_model(vit_name, pretrained=args.pretrained)
+    #student_vit = timm.create_model(vit_name, pretrained=args.pretrained)
+    #teacher_vit = timm.create_model(vit_name, pretrained=args.pretrained)
+
+    student_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
+    teacher_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
 
     student = MultiCropWrapper(
         student_vit,
@@ -144,6 +147,7 @@ def main():
     n_steps = 0
 
     for e in range(args.n_epochs):
+        print('EPOCH:', e)
         for i, (images, _) in tqdm.tqdm(  #так как у нас self-supervised обучение, то не смотрим на метки 
             enumerate(data_loader_train_aug), total=n_batches
         ):
@@ -157,18 +161,21 @@ def main():
                 )
                 writer.add_embedding(
                     embs,
-                    metadata=[label_mapping[l] for l in labels_],
+                    metaadata=[label_mapping[l] for l in labels_],
                     label_img=imgs,
                     global_step=n_steps,
                     tag="embeddings",
                 )
-
+            
                 # KNN
                 current_acc = compute_knn(
                     student.backbone,
                     data_loader_train_plain,
                     data_loader_val_plain,
                 )
+                print('BEST ACCURACY:', best_acc)
+                print('CURRENT ACCURACY:', current_acc)
+
                 writer.add_scalar("knn-accuracy", current_acc, n_steps)
                 if current_acc > best_acc:  #сохраняем модель, у которой лучшее accuracy
                     torch.save(student, logging_path / "best_model.pth")
