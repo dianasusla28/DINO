@@ -106,11 +106,11 @@ def main():
     writer.add_text("arguments", json.dumps(vars(args)))
 
     # Neural network related
-    #student_vit = timm.create_model(vit_name, pretrained=args.pretrained)
-    #teacher_vit = timm.create_model(vit_name, pretrained=args.pretrained)
+    student_vit = timm.create_model(vit_name, pretrained=args.pretrained)
+    teacher_vit = timm.create_model(vit_name, pretrained=args.pretrained)
 
-    student_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
-    teacher_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
+    #student_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
+    #teacher_vit = torch.load("/content/gdrive/My Drive/best_model.pth", map_location="cpu").backbone
 
     student = MultiCropWrapper(
         student_vit,
